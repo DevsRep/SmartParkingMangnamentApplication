@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom"
+import { data, Navigate, Outlet, useNavigate} from "react-router-dom"
 import NavBar from "../Navbar"
 import { getDoc, doc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
@@ -7,6 +7,8 @@ import { useAuth } from "../AuthContext";
 
 
 function AdminDash(){
+
+    const navigate = useNavigate();
 
     const { user, logout } = useAuth();
 
@@ -27,6 +29,8 @@ function AdminDash(){
     }
   };
 
+
+
   
   useEffect(() => {
     if (user) {
@@ -34,8 +38,10 @@ function AdminDash(){
       const data = await fetchUserData(user.uid);
       setUserData(data);
       };
-      fetchUser();
+      fetchUser()
     }
+
+    
   }, []);
   
 
