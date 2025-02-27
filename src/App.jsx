@@ -24,6 +24,7 @@ import MainHome from "./pages/mainHome";
 import NotFound404 from "./pages/notFound404";
 import AdminDash from "./pages/AdminDash";
 import Dashboard from "./pages/Dashboard";
+import AdminLogin from "./pages/AdminLogin";
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
             <Route path="/home" element={<MainHome />} />
             <Route path="/home/profile" element={<ProfileMang />} />
           </Route>
+          <Route path="/adminlogin" element={<AdminLogin />} />
           <Route path="/admin" element={<AdminDash />}>
             <Route path="/adminhome" element={<Dashboard />} />
             <Route path="/admin" element={<Dashboard />} />
