@@ -544,3 +544,117 @@ hr{
   min-width: 300px;
 }
 
+
+/* -----------------------Admin Pge Sty------ */
+
+.quick-parking-lot-info-cont{
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap:10px;
+}
+
+.card{
+  background-color: var(--box-shadow-color-light);
+  border-radius: 10px;
+  padding: 8px 10px;
+  border:1px solid var(--border-color-cool);
+  transition: all 250ms;
+}
+
+
+.card:hover{
+  box-shadow: 0 0 10px 2px var(--box-shadow-color-dark);
+}
+
+.card:hover .card-name{
+  color: #fff;
+}
+
+.card-name{
+  color: #aeaeae;
+  font-size: calc(10px + 0.3vw);
+  transition: all 250ms;
+}
+
+.card-val{
+  font-size: calc(15px + 1vw);
+}
+
+
+
+
+
+@media only screen and (max-width:600px) {
+
+
+  .login-page{
+    align-items: start;
+    background-size: 200%;
+  }
+
+  .app-name-login{
+    line-height: normal;
+    margin-top: calc(20px + 2vw);
+    padding: calc(20px + 2vw);
+  }
+
+  .login-o-cont{
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top:45vh;
+    border-radius: 10px 10px 0 0;
+  }
+  
+  .login-cont{
+    min-width: auto;
+    width: calc(220px + 10vw);
+    padding: 0;
+  }
+
+  .details, .details-dark{
+    padding: 10px;
+  }
+
+  .main-app{
+    width: calc(100% - 10px);
+    border: none;
+    box-shadow: none;
+  }
+
+  .quick-access-item{
+    min-height: max-content;
+  }
+  
+  .quick-access-Name{
+    font-size: calc(10px + 1vw);
+  }
+
+  .navigation{
+    width: calc(100vw - 1px);
+    border: none;
+  }
+
+
+  .profile-img{
+    font-size: calc(30px + 10vw);
+  }
+
+  .profile-details h5{
+    font-size: calc(6px + 1vw);
+  }
+
+  .sub-head{
+    font-size: calc(10px + 3vw);
+  }
+
+  .username-cont label{
+    font-size: calc(7px + 2vw);
+  }
+
+  .change-btn{
+    width: max-content;
+    padding: 5px 10px;
+  }
+
+}
