@@ -17,24 +17,34 @@ function Home() {
 
 
   const checkSignUp = async ()=>{
-    console.log(user)
-    if(!user.emailVerified){
+    // console.log(user)
+    if(user && !user.emailVerified){
       // const auth = getAuth();
       await sendEmailVerification(user)
-      alert("A verification Link has been sent to you mail")
-    }else{
-      console.log("User Verified")
+      
     }
-
   }
 
 
   useEffect(()=>{
     checkSignUp()
-    
   },[])
 
+  const checkSignUpVer = ()=>{
+    if(!user.emailVerified){
+      // const auth = getAuth();
+      alert("Please verify your account :)")
+      
+    }else{
+      console.log("User Verified")
+    }
+  }
 
+  useEffect(()=>{
+    if(userData){
+      checkSignUpVer()
+    }
+  },[userData])
 
   const fetchUserData = async (uid) => {
     try {

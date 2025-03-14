@@ -287,6 +287,10 @@ body {
   --text-color-light : #000000;
   --box-shadow-color-dark: #4a91e228;
   --box-shadow-color-light: #00000041;
+  --color-code-available : #00ff00;
+  --color-code-full : #ff0000;
+  --color-code-limited : #ff8c00;
+  --color-code-closed: #ff0000;
 }
 
 
@@ -415,10 +419,8 @@ body {
   padding: 0px 0 15px 0;
 }
 
-.quick-access-item{
+.quick-access-links{
   /* display: block; */
-  display: grid;
-  gap: 10px;
   /* flex-direction: column; */
   padding: 10px;
   align-items: center;
@@ -426,18 +428,24 @@ body {
   width: calc(100% - 1px);
   transition: all 250ms;
   cursor: pointer;
+  text-decoration: none;
 }
 
-.quick-access-item:not(:nth-child(3n)) {
+.quick-access-item{
+  display: grid;
+  gap: 10px;
+}
+
+.quick-access-links:not(:nth-child(3n)) {
   border-right: 1px solid var(--border-color-cool);
   /* background-color: #0000004;1; */
 }
 
-.quick-access-item:not(:nth-last-child(-n + 3)) {
+.quick-access-links:not(:nth-last-child(-n + 3)) {
   border-bottom:1px solid var(--border-color-cool);
 }
 
-.quick-access-item:hover{
+.quick-access-links:hover{
   background-color: #47474741;
 }
 
@@ -448,7 +456,7 @@ body {
 
 .profile-details{
   display: grid;
-  grid-template-rows: repeat(3, 1fr);
+  grid-template-rows: repeat(4, 1fr);
   grid-template-columns: 30% 70%;
 }
 
@@ -486,8 +494,8 @@ body {
   outline-offset: 2px;
 }
 
-.grid-row-span-3{
-  grid-row: span 3;
+.grid-row-span-4{
+  grid-row: span 4;
 }
 
 .edit-cont{
@@ -544,3 +552,287 @@ hr{
   min-width: 300px;
 }
 
+.parking-filters{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  flex-direction: row;
+}
+
+.parking-lot-select{
+  background-color: var(--box-shadow-color-light);
+  color: var(--text-color-dark);
+  padding: 10px 20px;
+  border-radius: 10px;
+}
+
+.parking-lot-select option{
+  background-color: var(--main-card-color-dark);
+  color: var(--text-color-dark);
+}
+
+.parking-filters button{
+  background-color: var(--border-color-cool);
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: all 250ms;
+}
+
+.parking-filters button:hover{
+  background-color: #316198;
+}
+
+.find-parking-cont{
+  display: grid;
+  gap:20px;
+}
+
+.parking-lot-cards-cont div{
+  display: grid;
+  gap:15px;
+}
+
+.parking-lot-card{
+  background-color: var(--main-card-color-dark);
+  border-radius: 10px;
+  padding: 20px;
+  border:1px solid #5f5f5f;
+  /* box-shadow: 0 0 10px 2px var(--box-shadow-color-dark); */
+  transition: all 250ms;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.parking-lot-card:hover{
+  box-shadow: 0 0 10px 1px #97979735;
+  border-color: #979797;
+  
+  /* background-color: var(--border-color-gold); */
+}
+
+.parking-lot-card .parking-lot-name{
+  font-size: calc(10px + 0.6vw);
+}
+
+.parking-lot-card p{
+  font-size: calc(5px + 0.5vw);
+  /* font-family: Arial, Helvetica, sans-serif; */
+  color: #bababa;
+}
+
+.parking-lot-card .top-cont{
+  display: flex;
+  align-items: center;
+}
+
+.parking-lot-card .right{
+  margin-left: auto;
+  text-align: right;
+}
+
+.parking-lot-card .rating{
+  font-family: monospace;
+  font-size: calc(10px + 0.4vw);
+
+}
+
+.parking-lot-card .stat-indicator{
+  height: 10px;
+  width: 10px;
+  border-radius: 1000px;
+  background-color: var(--color-code-available);
+}
+
+.parking-lot-card .status{
+  display: flex;
+  gap:5px;
+  align-items: center;
+}
+
+
+.ind-parking-lot-details-cont{
+  display: grid;
+  gap:14px
+}
+
+.ind-parking-lot-details-cont .parking-name{
+  font-size: calc(11px + 1vw);
+}
+
+.ind-parking-lot-details-cont .parking-address{
+  font-size: calc(8px + 0.5vw);
+  color: #bcbcbc;
+}
+
+.ind-parking-lot-details-cont .book-cont{
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: yellowgreen;
+}
+
+
+.rating-veh-types-cont{
+  display: flex;
+  align-items: center;
+}
+
+.rating-veh-types-cont h5{
+  font-size: calc(8px + 0.5vw);
+}
+
+.veh-types{
+  display: flex;
+  align-items: center;
+  gap:10px;
+  margin-left: auto;
+}
+
+.veh-types div{
+  padding: 3px 5px;
+  background-color: #003c79b8;
+  color: #add6ff;
+  border-radius: 5px;
+  display: grid;
+  font-size: calc(8px + 0.4vw);
+
+  place-items: center;
+}
+
+.ind-parking-lot-details-cont .crnt-stats{
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap:12px;
+}
+
+
+/* -----------------------Admin Pge Sty------ */
+
+.quick-parking-lot-info-cont{
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap:10px;
+}
+
+.card{
+  background-color: var(--box-shadow-color-light);
+  border-radius: 10px;
+  padding: 8px 10px;
+  border:1px solid var(--border-color-cool);
+  transition: all 250ms;
+}
+
+
+.card:hover{
+  box-shadow: 0 0 10px 2px var(--box-shadow-color-dark);
+}
+
+.card:hover .card-name{
+  color: #fff;
+}
+
+.card-name{
+  color: #aeaeae;
+  font-size: calc(10px + 0.3vw);
+  transition: all 250ms;
+}
+
+.card-val{
+  font-size: calc(15px + 1vw);
+}
+
+.work-log{
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #333;
+  padding: 12px 0;
+}
+
+.work-log-id{
+  color: #8d8d8d;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.work-log-time{
+  margin-left: auto;
+}
+
+
+
+@media only screen and (max-width:600px) {
+
+
+  .login-page{
+    align-items: start;
+    background-size: 200%;
+  }
+
+  .app-name-login{
+    line-height: normal;
+    margin-top: calc(20px + 2vw);
+    padding: calc(20px + 2vw);
+  }
+
+  .login-o-cont{
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top:45vh;
+    border-radius: 10px 10px 0 0;
+  }
+  
+  .login-cont{
+    min-width: auto;
+    width: calc(220px + 10vw);
+    padding: 0;
+  }
+
+  .details, .details-dark{
+    padding: 10px;
+  }
+
+  .main-app{
+    width: calc(100% - 10px);
+    border: none;
+    box-shadow: none;
+  }
+
+  .quick-access-item{
+    min-height: max-content;
+  }
+  
+  .quick-access-Name{
+    font-size: calc(10px + 1vw);
+  }
+
+  .navigation{
+    width: calc(100vw - 1px);
+    border: none;
+  }
+
+
+  .profile-img{
+    font-size: calc(30px + 10vw);
+  }
+
+  .profile-details h5{
+    font-size: calc(6px + 1vw);
+  }
+
+  .sub-head{
+    font-size: calc(10px + 3vw);
+  }
+
+  .username-cont label{
+    font-size: calc(7px + 2vw);
+  }
+
+  .change-btn{
+    width: max-content;
+    padding: 5px 10px;
+  }
+
+}
