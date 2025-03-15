@@ -40,6 +40,7 @@ function Signup() {
         email: user.email,
         phone: contact,
         createdAt: new Date(),
+        isAdmin: false
       });
 
 

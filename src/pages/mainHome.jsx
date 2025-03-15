@@ -18,12 +18,12 @@ function MainHome(){
                 <h4>Quick access links</h4>
                 <div className="quick-access">
 
-                    <QuickAccessBtns icon={"❓"} desc={"Find Parking"} />             
-                    <QuickAccessBtns icon={"🔃"} desc={"Parking History"} />             
+                    <QuickAccessBtns icon={"❓"} desc={"Find Parking"} link={"/home/parkings/find"}/>             
+                    <QuickAccessBtns icon={"🔃"} desc={"History"} />             
                     <QuickAccessBtns icon={"💵"} desc={"Payments"} />             
                     <QuickAccessBtns icon={"📄"} desc={"Reservations"} />             
                     <QuickAccessBtns icon={"⚠️"} desc={"Alerts"} />             
-                    <QuickAccessBtns icon={"🙍🏽‍♂️"} desc={"Profile"} />             
+                    <QuickAccessBtns icon={"🙍🏽‍♂️"} desc={"Profile"} link={"/home/profile"}/>             
 
                     
                 </div>

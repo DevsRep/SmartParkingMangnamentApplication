@@ -14,7 +14,7 @@ function Reset() {
       setMessage("✅ Reset link sent to your email!");
       setTimeout(() => navigate("/"), 2000);
     } catch (err) {
-      setMessage("❌ " + err.message);
+      setMessage(err.message);
     }
   };
 

@@ -16,7 +16,7 @@ function AdminLogin() {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       
-      navigate("/home"); 
+      navigate("/admin"); 
     } catch (err) {
       setError(err.message);
     }
@@ -53,12 +53,12 @@ function AdminLogin() {
       <h3 className="app-name-login">Smart Parking Application</h3>
       <div className="login-o-cont">
         <div className="login-cont">
-          <h2 style={{marginLeft:"10px"}}>Login</h2>
+          <h2 style={{marginLeft:"10px"}}>Admin Login</h2>
           <input type="email" className=" details" style={{border:"none"}} placeholder="Email" onChange={(e) => setEmail(e.target.value)} onKeyDown={handleKeyPress}/>
           <input type="password" className="email-cont details" placeholder="Password" onChange={(e) => setPassword(e.target.value)}  onKeyDown={handleKeyPress}/>
           <button className="login-btn" onClick={handleLogin}>Login</button>
           {error && <p style={{ color: "red" }}>{error}</p>}
-          <p className="login-hint" style={{marginLeft:"10px"}}>Don't have an account? <Link to="/signup">Sign Up</Link></p>
+          <p className="login-hint" style={{marginLeft:"10px"}}>Don't have an account? <Link to="/adminsignup">Sign Up</Link></p>
         </div>
           <p className="login-hint-pswd" ><Link to="/reset">Forgot Password?</Link></p>
       </div>

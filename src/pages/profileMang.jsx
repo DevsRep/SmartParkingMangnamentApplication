@@ -16,7 +16,7 @@ function ProfileMang(){
     const { user, logout } = useAuth();
 
 
-    console.log(user)
+    // console.log(user)
 
     const [username, setusername] = useState("")
     const [newPhone, setNewPhone] = useState("")
@@ -86,6 +86,7 @@ function ProfileMang(){
             alert("Cannot send Emial")
         });
     }
+
 
 
     const handleUpdatePassword = async () =>{
@@ -219,9 +220,10 @@ function ProfileMang(){
                 <h4 className="sub-head">Your Profile</h4>
 
                 <div className="profile-details">
-                    <p className="profile-img grid-row-span-3">🤖</p>
+                    <p className="profile-img grid-row-span-4">🤖</p>
                     <h5>Username : {!userData ? "Loading.." : userData.fullName}</h5>
                     <h5>Email : {!userData ? "Loading.." :userData.email}</h5>
+                    <h5>Phone : {!userData ? "Loading.." : userData.phone}</h5>
                     <h5>UID : {!userData ? "Loading.." : userData.uid}</h5>
 
                 </div>
@@ -245,15 +247,15 @@ function ProfileMang(){
 
                     <div className="username-cont">
                         <label htmlFor="username-change">Change Phone:</label>
-                        <input type="text" name="username-change" className="details-dark" placeholder="New Phone Number" onChange={(e)=>setNewPhone(e.target.value)}></input>
+                        <input type="number" name="username-change" className="details-dark" placeholder="New Phone Number" onChange={(e)=>setNewPhone(e.target.value)}></input>
                         <button className="change-btn" onClick={handleContactUpdate}>Change</button>
                     </div>
 
                     <div className="pswd-cont">
                         <label htmlFor="username-change">Change Password:</label>
                         <input type="password" name="username-change" className="details-dark" placeholder="Current Password" onChange={(e)=>setcrntpswd(e.target.value)}></input>
-                        <input type="text" name="username-change" className="details-dark" placeholder="New Password" onChange={(e)=>setnewpswd(e.target.value)}></input>
-                        <input type="text" name="username-change" className="details-dark" placeholder="Reenter Password" onChange={(e)=>setnewrepswd(e.target.value)}></input>
+                        <input type="password" name="username-change" className="details-dark" placeholder="New Password" onChange={(e)=>setnewpswd(e.target.value)}></input>
+                        <input type="password" name="username-change" className="details-dark" placeholder="Reenter Password" onChange={(e)=>setnewrepswd(e.target.value)}></input>
                         <div>
                             <button className="change-btn" onClick={handleUpdatePassword}>Change</button>
                             <button className="change-btn" onClick={handleUpdatePasswordemail} style={{width:"max-content", marginLeft:"10px"}}>Change thru Email</button>

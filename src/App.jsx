@@ -25,26 +25,63 @@ import NotFound404 from "./pages/notFound404";
 import AdminDash from "./pages/AdminDash";
 import Dashboard from "./pages/Dashboard";
 import AdminLogin from "./pages/AdminLogin";
+import LotConfig from "./pages/lotConfig";
+import FindParking from "./pages/FindParking";
+import Parkings from "./pages/Parkings";
+import ParkingLotDetails from "./pages/ParkingLotDetails";
+import AdminSignup from "./pages/AdminSignUp";
+import NewLotConfig from "./pages/NewLotConfig";
 
 function App() {
   return (
     <AuthProvider>
       <Router>
-        <Routes>
+        {/* <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/reset" element={<Reset />} />
           <Route path="/home" element={<Home />}>
-            <Route path="/home" element={<MainHome />} />
+            <Route path="/home/main" element={<MainHome />} />
             <Route path="/home/profile" element={<ProfileMang />} />
+            <Route path="/home/parkings" element={<FindParking />} >
+              <Route path="/home/parkings/:id" element={<Bookings />} />
+            </Route>
           </Route>
           <Route path="/adminlogin" element={<AdminLogin />} />
           <Route path="/admin" element={<AdminDash />}>
-            <Route path="/adminhome" element={<Dashboard />} />
             <Route path="/admin" element={<Dashboard />} />
+            <Route path="/admin/lot" element={<LotConfig />} />
           </Route>
           <Route path="*" element={<NotFound404 />} />
+        </Routes> */}
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/reset" element={<Reset />} />
+
+
+            <Route path="/home" element={<Home />}>
+              <Route index element={<MainHome />} /> Default Home Route
+              <Route path="main" element={<MainHome />} />
+              <Route path="profile" element={<ProfileMang />} />
+              <Route path="parkings" element={<Parkings />}>
+                <Route index path="find" element={<FindParking />} />
+                <Route path=":pid" element={<ParkingLotDetails />} />
+              </Route>
+            </Route>
+
+            <Route path="/adminlogin" element={<AdminLogin />} />
+            <Route path="/adminsignup" element={<AdminSignup />} />
+            <Route path="/admin" element={<AdminDash />}>
+              <Route index element={<Dashboard />} />
+              <Route path="lot" element={<LotConfig />} />
+              <Route path="new-lot" element={<NewLotConfig />} />
+            </Route>
+
+
+            <Route path="*" element={<NotFound404 />} />
         </Routes>
       </Router>
     </AuthProvider>

@@ -59,7 +59,7 @@ function NavBar(){
       </div>
 
       <div className="navigation" style={{height:"0px"}}>
-        <Link to={"/"}className="nav-links"><p>Home</p></Link>
+        <Link to={"/home/main"}className="nav-links"><p>Home</p></Link>
         <Link to={"/home/profile"} className="nav-links"><p>Profile</p></Link>
         <p className="nav-links" onClick={handleLogout}>Logout?</p>
       </div>

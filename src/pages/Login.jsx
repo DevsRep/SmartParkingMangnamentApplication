@@ -3,7 +3,7 @@ import { signInWithEmailAndPassword, sendEmailVerification } from "firebase/auth
 import { auth } from "../firebase";
 import { useAuth } from "../AuthContext";
 import { Link, useNavigate } from "react-router-dom";
-import LoadingScreen from "./loading";
+// import LoadingScreen from "./loading";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -13,10 +13,20 @@ function Login() {
   const { user, logout } = useAuth();
 
   const handleLogin = async () => {
+    if(email == "" || password == ""){
+      setError("Please fill all fields :)")
+      return
+    }
+
+    if(!email.includes("@") || !email.includes(".")){
+      setError("Not a valid email :(")
+      return 
+    }
+
     try {
       await signInWithEmailAndPassword(auth, email, password);
       
-      navigate("/home"); 
+      navigate("/home/main"); 
     } catch (err) {
       setError(err.message);
     }
@@ -32,7 +42,7 @@ function Login() {
   useEffect(()=>{
     if(auth.currentUser){
       console.log(user)
-      navigate("/Home")
+      navigate("/Home/main")
     }
   },[])
 
