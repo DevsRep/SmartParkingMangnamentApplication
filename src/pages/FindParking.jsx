@@ -9,7 +9,9 @@ import { useOutletContext } from "react-router-dom";
 
 function FindParking(){
 
-    const [parkingLots] = useOutletContext()
+    const [parkingLots, userData] = useOutletContext()
+    const [searchQuery, setSearchQuery] = useState("");
+    const [vehicleType, setVehicleType] = useState("");
 
 
     const { user, logout } = useAuth();
@@ -38,11 +40,23 @@ function FindParking(){
     // },[])
 
     // useEffect(() => {
-    //     while(parkingLots.length === 0){
+    //     // console.log("Pale :",parkingLots) 
+    // },[parkingLots])
 
-    //     }
-    //     console.log("Pale :",parkingLots) 
-    // },[])
+
+
+    const filteredParkings = Object.keys(parkingLots).filter(
+        parkingLot => parkingLots[parkingLot].Name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    const parkingArray = Object.values(parkingLots);
+
+    const filteredParkings2 = parkingArray.filter(parkingLot => {
+        const nameMatches = parkingLot.Name.toLowerCase().includes(searchQuery.toLowerCase());
+        const vehicleMatches = vehicleType === "" || parkingLot.vehicleTypes.includes(vehicleType);
+        return nameMatches && vehicleMatches;
+    });
+    // const filteredParkingsVeh = parkingLots.filter(parkingLot => parkingLot.vehicleTypes.includes(vehicleType));
 
     return(
         <div className="find-parking-cont">
@@ -50,12 +64,21 @@ function FindParking(){
             <h4 className="sub-head">Find Parking spaces:</h4>
 
 
+            <input 
+                type="text" 
+                placeholder="🔍Search Parking Lot..." 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="search-logs-input"
+            />
+
+
 
             <div className="parking-filters">
                 {/* <h4 className="sub-head">Filters:</h4> */}
-                <select className="parking-lot-select">
+                <select className="parking-lot-select" onChange={(e) => console.log(e.target.value)}>
                     <option value="loca">Select Location</option>
-                    <option value="location1">Amrita AB1 Parking</option>
+                    
                     <option value="location2">Amrita AB2 Parking</option>
                     <option value="location3">Amrita AB3 Parking</option>
                     <option value="location4">Amrita ASB Parking</option>
@@ -67,10 +90,14 @@ function FindParking(){
                     <option value="High">High</option>
                 </select>
 
-                <select className="parking-lot-select">
-                    <option value="any">Vehicle Type</option>
-                    <option value="car">Car</option>
-                    <option value="bike">Bike</option>
+                <select className="parking-lot-select" onChange={(e) => setVehicleType(e.target.value)}>
+                    <option value="">Vehicle Type</option>
+                    
+                    <option value="Car">Car</option>
+                    <option value="Bike">Bike</option>
+                    <option value="Truck">Truck</option>
+                    <option value="Bus">Bus</option>
+                    <option value="Mini-Truck">Mini-Truck</option>
 
                 </select>
 
@@ -81,27 +108,15 @@ function FindParking(){
 
             <div className="parking-lot-cards-cont">
                 <div>
-            { loading ? "Loading..." : 
-    
-                // <div>
-                // <ParkingLotCard key={2} Name={"Hello Parking"} capacity={30}/>
-                // <ParkingLotCard key={3} Name={"Hello Parking"} capacity={30}/>
-                // <ParkingLotCard key={4} Name={"Hello Parking"} capacity={30}/>
-                // <ParkingLotCard key={5} Name={"Hello Parking"} capacity={30}/>
-                // <ParkingLotCard key={6} Name={"Hello Parking"} capacity={30}/>
-                // <ParkingLotCard key={7} Name={"Hello Parking"} capacity={30}/>
-                // <ParkingLotCard key={8} Name={"Hello Parking"} capacity={30}/>
-
-                // </div>
-                
-                parkingLots.map((parkingLot, index) => {
-                    return(
-                        console.log(parkingLot),
-                        <ParkingLotCard key={index} data={parkingLot}/>
-                    )
-                })
-            }
-            </div>
+                    {loading ? (
+                        "Loading..."
+                    ) : (
+                        // console.log()
+                        filteredParkings2.map((parking, index) => (
+                            <ParkingLotCard key={index} data={parking} />
+                        ))
+                    )}
+                </div>
             </div>
             
         

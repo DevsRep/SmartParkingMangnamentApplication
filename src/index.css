@@ -172,6 +172,7 @@ body {
   background-color: #c3c3c381;
   border-radius: 1000px;
   transition: all 250ms;
+  width: 100%;
 }
 
 .details-dark, .details, .reset-i-cont > input{
@@ -291,6 +292,7 @@ body {
   --color-code-full : #ff0000;
   --color-code-limited : #ff8c00;
   --color-code-closed: #ff0000;
+  --parking-lines : #ffffff;
 }
 
 
@@ -654,7 +656,7 @@ hr{
 
 .ind-parking-lot-details-cont{
   display: grid;
-  gap:14px
+  gap:14px;
 }
 
 .ind-parking-lot-details-cont .parking-name{
@@ -668,10 +670,25 @@ hr{
 
 .ind-parking-lot-details-cont .book-cont{
   position: sticky;
-  bottom: 0;
+  padding: 20px;
+  border-radius: 10px;
+  bottom: 10px;
+
   left: 0;
   right: 0;
-  background-color: yellowgreen;
+  background-color: #1212127b;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 10px 1px rgba(123, 123, 123, 0.166);
+  
+}
+
+.book-cont .book-btn{
+  background-color: var(--border-color-cool);
+  border: none;
+  border-radius: 7px;
+  padding: 10px;
+  
+  cursor: pointer;
 }
 
 
@@ -706,6 +723,318 @@ hr{
   display: grid;
   grid-template-columns: repeat(3,1fr);
   gap:12px;
+}
+
+.pricing-cont{
+  display: grid;
+  grid-template-columns: repeat(5,1fr);
+  /* place-items: center; */
+}
+
+.pricing-card > *{
+  display: grid;
+  place-items: center;
+  padding: 7px 0;
+}
+
+.parking-grid{
+  display: grid;
+}
+
+.parking-slot{
+  border-top: 3px solid var(--parking-lines);
+  border-right: 3px solid var(--parking-lines);
+  margin-bottom: 20px;
+  display: grid;
+  place-items: center;
+}
+
+.parking-slot:nth-child(10n+1){
+  border-left: 3px solid var(--parking-lines);
+
+}
+
+/* .parking-slot:first-child{
+  border-left: 3px solid var(--parking-lines);
+
+} */
+
+
+
+/* .avilable-spot{
+  background-color: var(--color-code-available);
+}
+
+.occu-spot{
+  background-color: var(--color-code-full);
+} */
+
+
+
+.pricing-card h5 {
+  font-size: calc(9px + 0.5vw);
+  /* text-decoration: underline; */
+  border-bottom: 1px solid var(--border-color-cool);
+}
+
+.pricing-card:not(:last-child){
+  border-right: 1px solid var(--border-color-cool);
+}
+
+
+.lot-config-cont{
+  display: grid;
+  gap:14px; 
+}
+
+.lot-config-cont h3{
+  font-size: calc(12px + 1vw);
+}
+
+.lot-config-cont h4{
+  font-size: calc(11px + 0.5vw);
+}
+
+.pricing-change-cont{
+  display: grid;
+  grid-template-columns: 30% 70%;
+  gap:10px;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.price-change-i-cont {
+  display: grid;
+  grid-template-columns: 30% 50%;
+  align-items: center;
+}
+
+.price-change-name{
+  width: max-content;
+}
+
+.pricing-change-cont input{
+  background-color: var(--main-bg-color-dark);
+  border: none;
+  padding: 5px 10px;
+  border-radius: 0 10px 10px 0;
+}
+
+
+
+
+
+
+.page-null-cont{
+  
+  height: 60vh;
+  width: 100%;
+  display: grid;
+  place-items: center;
+}
+
+.page-null-cont div{
+  display: grid;
+  place-items: center;
+  opacity: 0.5;
+}
+
+.page-null-cont div h3{
+  color: var(--text-color-dark);
+  font-weight: normal;
+  text-align: center;
+}
+
+.page-null-cont .page-hint-icon{
+  font-size: calc(30px + 10vw);
+}
+
+
+
+
+
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.popup-container {
+  background-color: var(--main-card-color-dark);
+  padding: 20px;
+  border-radius: 8px;
+  width: 300px;
+}
+.popup-container h2 {
+  text-align: center;
+}
+.popup-container form div {
+  margin-bottom: 15px;
+}
+.popup-container label {
+  display: block;
+  margin-bottom: 5px;
+}
+.popup-container input {
+  width: 100%;
+  padding: 8px;
+  border-radius: 4px;
+  background-color: var(--main-bg-color-dark);
+  border: none;
+  color: var(--text-color-dark);
+  
+}
+
+.popup-container select{
+  width: 100%;
+  padding: 8px;
+  border-radius: 4px;
+  border: none;
+  background-color: var(--main-bg-color-dark);
+}
+
+/* .popup-container select option{
+  color: var(--text-color-dark);
+} */
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+}
+.popup-container button {
+  padding: 10px;
+  background-color: #00509e;
+  color: white;
+  border: none;
+  border-radius: 4px;
+}
+.popup-container button[type="button"] {
+  background-color: #ccc;
+}
+
+
+
+
+/* Container for the parking lot info */
+.parking-lot-container {
+  background-color: var(--main-bg-color-dark);
+  border-radius: 8px;
+  padding: 20px;
+  margin: 15px 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  display: grid;
+  gap:15px
+}
+
+.parking-lot-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Title styling */
+.parking-lot-title,
+.parking-lot-id {
+  font-size: calc(20px + 0.7vw);
+  color: var(--text-color-dark);
+  font-weight: bold;
+  /* margin-bottom: 10px; */
+}
+
+.parking-lot-id{
+  font-size: calc(10px + 0.3vw);
+  color: #676767;
+  font-weight: normal;
+
+}
+
+/* Address and time styling */
+.parking-address,
+.parking-times {
+  font-size: 16px;
+  color: var(--text-color-dark);
+  /* margin-bottom: 10px; */
+}
+
+/* .parking-times span{
+  background-color: var(--text-color-dark);
+  padding: 3px;
+  border-radius:3px;
+  color: #000000;
+  font-weight: bold;
+} */
+
+/* Vehicle info styling */
+.vehicle-info {
+  font-size: calc(10px + 0.4vw);
+  color: var(--text-color-dark);
+  /* margin-bottom: 10px; */
+}
+
+.vehicle-data {
+  font-weight: bold;
+  color: #333;
+  padding: 2px 4px;
+  border-radius: 3px;
+  background-color: var(--text-color-dark);
+}
+
+/* Status styling */
+.parking-status {
+  font-size: calc(10px + 0.4vw);
+  /* margin-top: 15px; */
+}
+
+.status {
+  font-weight: bold;
+  padding: 3px 5px;
+  border-radius: 4px;
+}
+
+.status.active {
+  background-color: #28a745;
+  color: white;
+}
+
+.status.inactive, .status.cancelled {
+  background-color: #dc3545;
+  color: white;
+}
+
+.status.not-used {
+  background-color: #ffc107;
+  color: black;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 15px;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+
+.cancel-btn {
+  padding: 10px 20px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.cancel-btn:hover {
+  background-color: #c82333;
 }
 
 
@@ -759,6 +1088,88 @@ hr{
 .work-log-time{
   margin-left: auto;
 }
+
+.new-lot-config-cont{
+  display: grid;
+  gap:15px;
+}
+
+.new-lot-config-cont h4{
+  font-size: calc(10px + 1vw);
+}
+
+.new-parking-lot-form{
+  display: grid;
+  gap: 15px;
+}
+
+.form-group > h5{
+  padding-left: 10px;
+}
+
+.form-group{
+  display: grid;
+  align-items: center;
+  gap: 8px;
+}
+
+.form-group .form-inp{
+  background-color: var(--main-bg-color-dark);
+  padding: 10px 15px;
+  border: 1px solid #333;
+  border-radius: 7px;
+  transition: all 250ms;
+}
+  
+.time-inp-cont{
+  display: grid;
+  gap:15px;
+  place-items: center;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.time-inp-cont .form-inp{
+  width: 100%;
+}
+
+.allowed-vehicles-cont{
+  display: grid;
+  align-items: center;
+  /* gap:10px; */
+  grid-template-columns: repeat(5,1fr);
+}
+
+.allowed-vehicle{
+  display: grid;
+  place-items: center;
+  background-color: var(--main-bg-color-dark);
+  /* width: 100%; */
+  padding: 10px 0;
+  cursor: pointer;
+}
+
+.allowed-vehicle:not(:last-child){
+  border-right: 1px solid #333;
+}
+
+.allowed-vehicle:hover{
+  background-color: #333;
+}
+
+
+.log-container{
+  display: grid;
+  gap: 15px;
+}
+
+.search-logs-input{
+  background-color: var(--main-bg-color-dark);
+  padding: 10px 15px;
+  border: 1px solid #333;
+  border-radius: 7px;
+  transition: all 250ms;
+}
+
 
 
 
@@ -834,5 +1245,73 @@ hr{
     width: max-content;
     padding: 5px 10px;
   }
+
+  .ind-parking-lot-details-cont .parking-name{
+    font-size: calc(25px + 1vw);
+  }
+  
+  .ind-parking-lot-details-cont .parking-address{
+    font-size: calc(10px + 0.5vw);
+    color: #bcbcbc;
+  }
+
+  .card-name{
+    font-size: calc(11px + 0.3vw);
+  }
+  
+  .card-val{
+    font-size: calc(20px + 1vw);
+  }
+
+  .pricing-card>h5{
+    font-size: calc(10px + 1vw);
+  }
+
+  .pricing-card>p{
+    font-size: calc(11px + 1vw);
+  }
+
+  .rating-veh-types-cont h5{
+    font-size: calc(10px + 0.7vw);
+  }
+
+  .page-null-cont .page-hint-icon{
+    font-size: calc(110px + 10vw);
+  }
+
+  .cancel-btn{
+    padding: 5px 7px;
+    font-size: calc(12px + 0.5vw);
+  }
+
+  .status, .vehicle-info{
+    padding: 3px;
+  }
+
+  .parking-lot-title{
+    font-size: calc(15px + 1vw);
+  }  
+  
+  .parking-lot-id{
+    font-size: calc(6px + 1vw);
+  }
+
+  .parking-address, .parking-times{
+    font-size: calc(9px + 1vw);
+  }
+
+
+  .parking-lot-cards-cont div{
+    gap:8px;
+  }
+
+  .top-cont .parking-lot-name{
+    font-size: calc(15px + 1vw);
+  }
+
+  .top-cont div p{
+    font-size: calc(10px);
+  }
+  
 
 }

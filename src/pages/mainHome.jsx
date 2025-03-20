@@ -19,9 +19,9 @@ function MainHome(){
                 <div className="quick-access">
 
                     <QuickAccessBtns icon={"❓"} desc={"Find Parking"} link={"/home/parkings/find"}/>             
-                    <QuickAccessBtns icon={"🔃"} desc={"History"} />             
+                    <QuickAccessBtns icon={"🔃"} desc={"History"} link={"/home/history"}/>             
                     <QuickAccessBtns icon={"💵"} desc={"Payments"} />             
-                    <QuickAccessBtns icon={"📄"} desc={"Reservations"} />             
+                    <QuickAccessBtns icon={"📄"} desc={"Reservations"} link={"/home/reservation"}/>             
                     <QuickAccessBtns icon={"⚠️"} desc={"Alerts"} />             
                     <QuickAccessBtns icon={"🙍🏽‍♂️"} desc={"Profile"} link={"/home/profile"}/>             
 

@@ -29,6 +29,12 @@ import LotConfig from "./pages/lotConfig";
 import FindParking from "./pages/FindParking";
 import Parkings from "./pages/Parkings";
 import ParkingLotDetails from "./pages/ParkingLotDetails";
+import AdminSignup from "./pages/AdminSignUp";
+import NewLotConfig from "./pages/NewLotConfig";
+import Logs from "./pages/Logs";
+import Reservations from "./pages/Reservations";
+import History from "./pages/History";
+import Portal from "./pages/Portal";
 
 function App() {
   return (
@@ -68,12 +74,18 @@ function App() {
                 <Route index path="find" element={<FindParking />} />
                 <Route path=":pid" element={<ParkingLotDetails />} />
               </Route>
+              <Route path="reservation" element={<Reservations />} />
+              <Route path="history" element={<History />} />
             </Route>
 
             <Route path="/adminlogin" element={<AdminLogin />} />
+            <Route path="/adminsignup" element={<AdminSignup />} />
             <Route path="/admin" element={<AdminDash />}>
               <Route index element={<Dashboard />} />
               <Route path="lot" element={<LotConfig />} />
+              <Route path="new-lot" element={<NewLotConfig />} />
+              <Route path="logs" element={<Logs />} />
+              <Route path="portal" element={<Portal />} />
             </Route>
 
 

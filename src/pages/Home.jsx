@@ -26,9 +26,9 @@ function Home() {
   }
 
 
-  useEffect(()=>{
-    checkSignUp()
-  },[])
+  // useEffect(()=>{
+  //   checkSignUp()
+  // },[])
 
   const checkSignUpVer = ()=>{
     if(!user.emailVerified){
@@ -40,11 +40,11 @@ function Home() {
     }
   }
 
-  useEffect(()=>{
-    if(userData){
-      checkSignUpVer()
-    }
-  },[userData])
+  // useEffect(()=>{
+  //   if(userData){
+  //     checkSignUpVer()
+  //   }
+  // },[userData])
 
   const fetchUserData = async (uid) => {
     try {
