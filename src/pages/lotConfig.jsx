@@ -111,7 +111,7 @@ function LotConfig(){
                     })
 
                 }
-                    <button style={{height:"100px"}} onClick={storePricingChange}></button>
+                    <button className="submit-btn" onClick={storePricingChange}>Save Changes</button>
                 </div>
 
             </div>

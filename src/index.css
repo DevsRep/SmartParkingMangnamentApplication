@@ -1113,6 +1113,15 @@ hr{
   gap: 8px;
 }
 
+.submit-btn{
+  padding: 10px;
+  display: grid;
+  place-items: center;
+  background-color: var(--border-color-cool);
+  border-radius: 10px;
+  border: none;
+}
+
 .form-group .form-inp{
   background-color: var(--main-bg-color-dark);
   padding: 10px 15px;

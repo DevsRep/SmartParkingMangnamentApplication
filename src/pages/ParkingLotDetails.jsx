@@ -6,6 +6,7 @@ import { db } from "../firebase";
 import { doc, getDoc, onSnapshot, setDoc, updateDoc } from "firebase/firestore";
 import { useAuth } from "../AuthContext";
 import { collection } from "firebase/firestore";
+// import LoadingScreen from "./loading";
 
 function ParkingLotDetails() {
     const navigate = useNavigate();
@@ -19,6 +20,7 @@ function ParkingLotDetails() {
     const [lisence, setLisence] = useState("")
     const [showPopup, setShowPopup] = useState(false);
     const [_, userData] = useOutletContext()
+    const [loading, setLoading] = useState()
 
 
     const handleStartTimeChange = (e) => setStartTime(e.target.value);
@@ -179,6 +181,9 @@ function ParkingLotDetails() {
     }
 
     return (
+
+        loading ? <LoadingScreen /> : 
+
         <div className="ind-parking-lot-details-cont">
             <h3 className="parking-name">{parkingLotData.Name}</h3>
             <p className="parking-address">{parkingLotData.address}</p>

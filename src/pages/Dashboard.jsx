@@ -52,10 +52,10 @@ function Dashboard(){
 
         const getDetails = async ()=>{
 
-            if(adminData && adminData.parkingLotId==null){
-                navigate("/admin/new-lot")
-                console.log("No Parking Lot ID found")
-            }
+            // if(adminData && adminData.parkingLotId==null){
+            //     navigate("/admin/new-lot")
+            //     console.log("No Parking Lot ID found")
+            // }
             console.log(adminData)
 
 
@@ -103,11 +103,14 @@ function Dashboard(){
 
     useEffect(() => {
         if (!adminData) return;
-
+        
+        console.log("Ad",adminData)
         // Fetch Static Data once
         // fetchParkingData(pid);
 
         // Listen for real-time updates in Firestore
+
+        try{
         const parkingDynRef = doc(db, "parking-dyn-info", adminData.parkingLotId);
         const unsubscribe = onSnapshot(parkingDynRef, (snapshot) => {
             if (snapshot.exists()) {
@@ -119,6 +122,9 @@ function Dashboard(){
 
         // Cleanup listener on unmount
         return () => unsubscribe();
+        }catch{
+            console.log("Data Not Found")
+        }
     }, [adminData]);
 
 
@@ -127,14 +133,17 @@ function Dashboard(){
 
     return(
 
-        !parkingLotData ? <LoadingScreen /> :
+        !adminData ? <LoadingScreen /> :
 
         <div className="dashboard">
 
             <div className="welcome-msg"><h3>Welcome, {userData ? userData.fullName : "Loading..."}</h3></div>
 
             <hr></hr>
-            <h4>Admin Dashboard</h4>
+            {
+            adminData.parkingLotId==null || !parkingLotData? <i>Create a parking lot to view Dashboard</i> :
+            <>            
+                <h4>Admin Dashboard</h4>
                 <div className="quick-parking-lot-info-cont">
 
                     
@@ -147,6 +156,8 @@ function Dashboard(){
 
 
                 </div>
+            </>
+            }
 
 
 

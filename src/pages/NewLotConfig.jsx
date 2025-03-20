@@ -6,6 +6,7 @@ import { useState } from "react";
 import { updateDoc } from "firebase/firestore";
 import { RecordLog } from "../RecordLog";
 import { setDoc } from "firebase/firestore";
+import LoadingScreen from "./loading";
 
 function NewLotConfig(){
 
@@ -19,6 +20,7 @@ function NewLotConfig(){
     const [close, setclose] = useState(2400)
     const [parkingLotID, setParkingLotID] = useState("")
     const [allowedVehicles, setAllowedVehicles] = useState({"Car":false,"Bike":false,"Bus":false,"Truck":false,"MiniTruck":false})
+    const [loading, setLoading] = useState(false)
 
 
 
@@ -44,6 +46,7 @@ function NewLotConfig(){
     }
 
     const createParkingLot = async () => {
+        setLoading(true)
         try {
             // Filter allowed vehicles
             const allowedVehiclesArr = Object.keys(allowedVehicles).filter(key => allowedVehicles[key]);
@@ -85,9 +88,10 @@ function NewLotConfig(){
                     avgrate: 0
                 },
                 regusers: 0,
-                remaining: cap,
+                remaining: parseInt(cap),
                 status: "AVAILABLE",
-                reservations :0
+                reservations :0,
+                capacity: parseInt(cap),
             });
     
             console.log("Parking dynamic info created");
@@ -95,6 +99,7 @@ function NewLotConfig(){
             // Log the event
             await RecordLog(adminData.aid, "Parking Lot Creation", "Admin has created a new Parking lot.");
             console.log("Log recorded");
+            setLoading(false)
 
             navigate("/admin")
     
@@ -115,6 +120,7 @@ function NewLotConfig(){
 
 
     return(
+        loading ? <LoadingScreen /> :
         <div className="new-lot-config-cont">
             
             <h4>Create a new Parking Lot</h4>
@@ -189,7 +195,7 @@ function NewLotConfig(){
 
                 </div>
 
-                <button onClick={createParkingLot} style={{height:"100px"}}></button>
+                <button onClick={createParkingLot} className={"submit-btn"}>Create</button>
 
             </div>
 
