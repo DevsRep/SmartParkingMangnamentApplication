@@ -17,3 +17,16 @@ export async function RecordLog(adminId, logname, logdesc){
     }
 }
 
+export async function AddUserAlert(userId, alertTitle, alertMessage) {
+    try {
+        const alertsRef = collection(db, `users/${userId}/alerts`);
+        await addDoc(alertsRef, {
+            title: alertTitle,
+            message: alertMessage,
+            timestamp: new Date(),
+        });
+        console.log("Alert added successfully!");
+    } catch (error) {
+        console.error("Error adding alert:", error);
+    }
+}

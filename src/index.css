@@ -850,8 +850,42 @@ hr{
 }
 
 
+.rating-feedback{
+  display: flex;
+
+}
+
+.rating-feedback{
+  display: grid;
+  grid-template-columns: 60% 20% 20%;
+  align-items: center;
+}
 
 
+.license-inputs{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  place-items: center;
+  gap:10px
+}
+
+.license-inputs input{
+  background-color: var(--main-bg-color-dark);
+  border: none;
+  padding: 5px 10px;
+  border-radius: 0 10px 10px 0;
+  font-size: calc(10px + 0.3vw);
+}
+
+.state-code-select{
+  background-color: var(--main-bg-color-dark);
+  border: none;
+  /* height: 80; */
+  width: 100%;
+  padding: 5px 10px;
+  border-radius: 0 10px 10px 0;
+  font-size: calc(10px + 0.3vw);
+}
 
 
 .popup-overlay {
@@ -869,7 +903,7 @@ hr{
   background-color: var(--main-card-color-dark);
   padding: 20px;
   border-radius: 8px;
-  width: 300px;
+  width: 450px;
 }
 .popup-container h2 {
   text-align: center;
@@ -891,7 +925,7 @@ hr{
   
 }
 
-.popup-container select{
+.veh-type-sel{
   width: 100%;
   padding: 8px;
   border-radius: 4px;
@@ -1003,8 +1037,13 @@ hr{
   color: white;
 }
 
-.status.inactive, .status.cancelled {
+.status.inactive, .status.cancelled, .status.canceled {
   background-color: #dc3545;
+  color: white;
+}
+
+.status.closed, .status.close{
+  background-color: red;
   color: white;
 }
 
@@ -1180,6 +1219,26 @@ hr{
 }
 
 
+.scanner-container{
+  display: grid;
+  gap: 15px;
+}
+
+
+.no-deco{
+  text-decoration: none;
+}
+
+.loc-viewer-icon{
+  display: flex;
+  /* place-items: center; */
+  /* padding: 200px; */
+  /* background-color: #00ff00; */
+  text-decoration: none;
+  flex-direction: row;
+  gap:10px
+}
+
 
 
 @media only screen and (max-width:600px) {
@@ -1321,6 +1380,21 @@ hr{
   .top-cont div p{
     font-size: calc(10px);
   }
+
+  .find-parking-cont{
+    gap:15px;
+  }
+
+  .find-parking-cont h4{
+    display: grid;
+    margin: 0;
+  }
+
+  .search-logs-input{
+    width: 100%;
+  }
+
+
   
 
 }

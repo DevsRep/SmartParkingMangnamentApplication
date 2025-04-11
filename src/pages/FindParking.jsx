@@ -5,7 +5,7 @@ import { getDocs, doc, collection } from "firebase/firestore";
 
 import LoadingScreen from "./loading";
 import ParkingLotCard from "../ParkinLotCard";
-import { useOutletContext } from "react-router-dom";
+import { Link, useOutletContext } from "react-router-dom";
 
 function FindParking(){
 
@@ -72,6 +72,8 @@ function FindParking(){
                 className="search-logs-input"
             />
 
+            <Link className="loc-viewer-icon" to={"https://navigate-to-nearest-parkinglot.streamlit.app/"}><i class="fa-solid fa-location-crosshairs"></i> View in Maps</Link>
+
 
 
             <div className="parking-filters">
@@ -94,14 +96,16 @@ function FindParking(){
                     <option value="">Vehicle Type</option>
                     
                     <option value="Car">Car</option>
-                    <option value="Bike">Bike</option>
+                    <option value="2-wheeler">Bike</option>
                     <option value="Truck">Truck</option>
                     <option value="Bus">Bus</option>
-                    <option value="Mini-Truck">Mini-Truck</option>
+                    <option value="MiniTruck">Mini-Truck</option>
 
                 </select>
 
-                <button className="search-btn">Apply</button>
+                
+
+                {/* <button className="search-btn">Apply</button> */}
             </div>
 
             <hr />

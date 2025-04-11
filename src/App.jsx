@@ -35,6 +35,11 @@ import Logs from "./pages/Logs";
 import Reservations from "./pages/Reservations";
 import History from "./pages/History";
 import Portal from "./pages/Portal";
+import NumberPlateScanner from "./pages/NumPlateScan";
+import Alerts from "./pages/Alerts";
+import ReservationsAll from "./pages/ReservationsAll";
+import Invoice from "./pages/Invoice";
+import Payments from "./pages/Payments";
 
 function App() {
   return (
@@ -74,8 +79,14 @@ function App() {
                 <Route index path="find" element={<FindParking />} />
                 <Route path=":pid" element={<ParkingLotDetails />} />
               </Route>
-              <Route path="reservation" element={<Reservations />} />
+              <Route path="reservation" element={<Reservations />}> 
+                <Route index element={<ReservationsAll />} />
+                <Route path=":rid" element={<Invoice />} />
+              </Route>
               <Route path="history" element={<History />} />
+              <Route path="alerts" element={<Alerts />} />
+              <Route path="payments" element={<Payments />} />
+              
             </Route>
 
             <Route path="/adminlogin" element={<AdminLogin />} />
@@ -86,6 +97,7 @@ function App() {
               <Route path="new-lot" element={<NewLotConfig />} />
               <Route path="logs" element={<Logs />} />
               <Route path="portal" element={<Portal />} />
+              <Route path="scanner" element={<NumberPlateScanner />} />
             </Route>
 
 

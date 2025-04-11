@@ -3,10 +3,12 @@ import { useEffect, useState } from "react";
 import Cards from "../Cards";
 import LoadingScreen from "./loading";
 import { db } from "../firebase";
-import { doc, getDoc, onSnapshot, setDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, onSnapshot, setDoc, Timestamp, updateDoc } from "firebase/firestore";
 import { useAuth } from "../AuthContext";
 import { collection } from "firebase/firestore";
 // import LoadingScreen from "./loading";
+import { FaStar } from "react-icons/fa";
+import { AddUserAlert } from "../RecordLog";
 
 function ParkingLotDetails() {
     const navigate = useNavigate();
@@ -21,7 +23,18 @@ function ParkingLotDetails() {
     const [showPopup, setShowPopup] = useState(false);
     const [_, userData] = useOutletContext()
     const [loading, setLoading] = useState()
+    const [rating, setRating] = useState(0);
+    const [hover, setHover] = useState(0);
+    const [totalCost, setTotalCost] = useState(0);
 
+    const [lisencePart1, setLisencePart1] = useState("");
+    const [lisencePart2, setLisencePart2] = useState("");
+    const [lisencePart3, setLisencePart3] = useState("");
+    const [lisencePart4, setLisencePart4] = useState("");
+
+    const indianStateCodes = [
+        "AP", "AR", "AS", "BR", "CG", "GA", "GJ", "HR", "HP", "JH", "KA", "KL", "MP", "MH", "MN", "ML", "MZ", "NL", "OD", "PB", "RJ", "SK", "TN", "TS", "TR", "UP", "UK", "WB", "AN", "CH", "DH", "DD", "JK", "LA", "LD", "DL", "PY"
+    ];
 
     const handleStartTimeChange = (e) => setStartTime(e.target.value);
     const handleEndTimeChange = (e) => setEndTime(e.target.value);
@@ -31,8 +44,20 @@ function ParkingLotDetails() {
         //     console.log(vehType)
         //  },2000)
     }
-    const handleLisenceChange = (e) => setLisence(e.target.value);
 
+    useEffect(() => {
+        setLisence(`${lisencePart1}${lisencePart2}${lisencePart3}${lisencePart4}`);
+    }, [lisencePart1, lisencePart2, lisencePart3, lisencePart4]);
+
+    useEffect(() => {
+        if (startTime && endTime && parkingDynData?.pricing) {
+            const start = new Date(`1970-01-01T${startTime}:00`).getTime();
+            const end = new Date(`1970-01-01T${endTime}:00`).getTime();
+            const hours = Math.max((end - start) / (1000 * 60 * 60), 0); // Ensure non-negative
+            const pricePerHour = parkingDynData.pricing[vehType] || 0;
+            setTotalCost(hours * pricePerHour);
+        }
+    }, [startTime, endTime, vehType, parkingDynData]);
 
     // Fetch Static Parking Data (One-time fetch)
     const fetchParkingData = async (pid) => {
@@ -48,6 +73,7 @@ function ParkingLotDetails() {
             console.error("Error fetching parking lot data:", error);
         }
     };
+
 
     // Real-Time Updates for Dynamic Parking Data
     useEffect(() => {
@@ -81,6 +107,22 @@ function ParkingLotDetails() {
     }
 
 
+    const submitRating = async () => {
+        if (!rating) return alert("Please enter a rating out of 5");
+        if (rating < 1 || rating > 5) return alert("Rating must be between 1 and 5");
+        
+        const slotRef = doc(db, "parking-dyn-info", pid);
+        const newNUsers = (parkingDynData.rating?.nusers || 0) + 1;
+        const newAvgRate = ((parkingDynData.rating?.avgrate || 0) * (newNUsers - 1) + rating) / newNUsers;
+    
+        await updateDoc(slotRef, {
+            "rating.nusers": newNUsers,
+            "rating.avgrate": newAvgRate,
+        });
+        alert("Rating submitted successfully!");
+    };
+
+
 
 
 
@@ -93,7 +135,22 @@ function ParkingLotDetails() {
             alert("Parking lot is currently full, Sorry! :(");
             return;
           }
+
+          if(startTime == "" || endTime == "" || lisence == ""){
+            alert("Please fill all the fields")
+            return
+          }
+
+          
+          if (totalCost > userData.balance) {
+            alert("Insufficient balance. Please recharge.");
+            return;
+          }
       
+          const userRef = doc(db, `users/${user.uid}`);
+          await updateDoc(userRef, { balance: userData.balance - totalCost });
+
+
           // Step 2: Create a new reservation document
           const reservationRef = doc(collection(db, `reservations/${parkingDynData.pid}/list`));
           const reservationId = reservationRef.id;
@@ -108,6 +165,9 @@ function ParkingLotDetails() {
             status: "not-used",
             lisencePlate : lisence,
             vehicleType : vehType,
+            amountPaid : totalCost,
+            Timestamp: Timestamp.now(),
+            date: new Date().toLocaleDateString(),
           };
 
           const reservationDataAdmin = {
@@ -120,17 +180,24 @@ function ParkingLotDetails() {
             status: "not-used",
             lisencePlate : lisence,
             vehicleType : vehType,
+            amountPaid : totalCost,
+            Timestamp: Timestamp.now(),
+            date: new Date().toLocaleDateString(),
+
           };
       
           await setDoc(reservationRef, reservationDataAdmin);
       
           // Step 3: Update `parking-dyn-info` to mark the slot as occupied
           const slotRef = doc(db, "parking-dyn-info", pid)
-          await updateDoc(slotRef, { remaining: parkingDynData.remaining - 1, regusers: parkingDynData.regusers + 1});
+          await updateDoc(slotRef, {regusers: parkingDynData.regusers + 1, reservations : parkingDynData.reservations + 1});
       
           // Step 4: Store reservation under `users/{userId}/reservations`
           const userReservationRef = doc(db, `users/${user.uid}/reservations/${reservationId}`);
           await setDoc(userReservationRef, reservationData);
+
+          AddUserAlert(user.uid, "Parking Slot Reserved", `Your parking slot has been reserved from ${startTime} to ${endTime}.`)
+          AddUserAlert(user.uid, "Payment Successful", `Your payment of ₹${totalCost} has been successfully processed.`)
       
           alert("Parking slot reserved successfully!");
 
@@ -141,10 +208,14 @@ function ParkingLotDetails() {
         }
     };
 
+    const handleRatingChange = (e) => {
+        setRating(e.target.value)
+        console.log(e.target.value)
+    }
+
     const totalSpots = parkingLotData.capacity;
     const availableSpots = parkingDynData.remaining;
     const occupiedSpots = totalSpots - availableSpots;
-
 
     const generateParkingSlots = () => {
       return Array.from({ length: totalSpots }, (_, index) => {
@@ -191,7 +262,7 @@ function ParkingLotDetails() {
             <hr />
 
             <div className="rating-veh-types-cont">
-                <h5>Ratings ({parkingDynData.rating?.nusers || 0}) ⭐ {parkingDynData.rating?.avgrate || "N/A"}</h5>
+                <h5>Ratings ({parkingDynData.rating?.nusers || 0}) ⭐ {parkingDynData.rating?.avgrate.toFixed(2) || "N/A"}</h5>
 
                 <div className="veh-types">
                     {parkingLotData.vehicleTypes?.length > 0 ? (
@@ -243,11 +314,33 @@ function ParkingLotDetails() {
                 </div>
             </div>
 
+
+            <div className="rating-feedback">
+                <h4>Rate this Parking Lot (Out of 5) :</h4>
+                <input
+                    type="number"
+                    min="1"
+                    max="5"
+                    value={rating}
+                    onChange={(e) => setRating(Number(e.target.value))}
+                />
+                <button className="submit-rating" onClick={submitRating} disabled={!rating}>Rate</button>
+            </div>
+
+
+
+
             <div className="book-cont">
                 <div>
-                <button className="book-btn"onClick={openPopup}>Book Now</button>
+                <button className="book-btn" style={{width:"100%"}} onClick={openPopup}>Book Now</button>
                 </div>
             </div>
+
+
+
+          
+
+            
 
 
             {showPopup && (
@@ -285,7 +378,7 @@ function ParkingLotDetails() {
                         required
                         /> */}
 
-                        <select onChange={handleVehTypeChange}>
+                        <select className={"veh-type-sel"} onChange={handleVehTypeChange}>
                         {
                             parkingLotData.vehicleTypes.map((vehType, index) => (
                                 <option key={index} value={vehType}>{vehType}</option>
@@ -296,17 +389,69 @@ function ParkingLotDetails() {
 
                     <div>
                         <label>License Plate:</label>
-                        <input
-                        type="text"
-                        value={lisence}
-                        onChange={handleLisenceChange}
-                        placeholder="Enter license plate"
-                        required
-                        />
+                        <div className="license-inputs">
+                            {/* Indian State Code Selection */}
+                            <select 
+                                className="state-code-select"
+                                value={lisencePart1} 
+                                onChange={(e) => setLisencePart1(e.target.value)} 
+                                required
+                            >
+                                <option value="">State</option>
+                                {indianStateCodes.map((code) => (
+                                    <option key={code} value={code}>{code}</option>
+                                ))}
+                            </select>
+
+                            {/* Two-digit Number (YY) */}
+                            <input 
+                                type="text" 
+                                value={lisencePart2} 
+                                onChange={(e) => {
+                                    if (/^\d{0,2}$/.test(e.target.value)) setLisencePart2(e.target.value);
+                                }} 
+                                placeholder="YY" 
+                                maxLength="2"
+                                required 
+                            />
+
+                            {/* Two-letter Alphabet Code (XX) */}
+                            <input 
+                                type="text" 
+                                value={lisencePart3} 
+                                onChange={(e) => {
+                                    if (/^[A-Za-z]{0,2}$/.test(e.target.value)) setLisencePart3(e.target.value.toUpperCase());
+                                }} 
+                                placeholder="XX" 
+                                maxLength="2"
+                                required 
+                            />
+
+                            {/* Four-digit Number (YYYY) */}
+                            <input 
+                                type="text" 
+                                value={lisencePart4} 
+                                onChange={(e) => {
+                                    if (/^\d{0,4}$/.test(e.target.value)) setLisencePart4(e.target.value);
+                                }} 
+                                placeholder="YYYY" 
+                                maxLength="4"
+                                required 
+                            />
+                        </div>
                     </div>
 
+                    <div className="total-cost">
+                        <h4>Total Cost:</h4>
+                        <p>₹{totalCost}</p>
+                    </div>
+
+
+
                     <div className="button-container">
-                        <button type="submit" onClick={bookParkinglot}>Submit</button>
+                        <button type="submit" onClick={bookParkinglot} disabled={totalCost > userData.balance}>
+                                {totalCost > userData.balance ? "Insufficient Balance" : `Confirm & Pay`}
+                        </button>
                         <button type="button" onClick={openPopup}>
                         Cancel
                         </button>

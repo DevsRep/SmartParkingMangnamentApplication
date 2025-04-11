@@ -52,7 +52,7 @@ function ParkingLotCard(props){
                 </div>
                 
                 <div className="right">
-                    <h4 className="ratings">⭐{props.data.dynamic.rating.avgrate}</h4>
+                    <h4 className="ratings">⭐{props.data.dynamic.rating.avgrate.toFixed(1)}</h4>
                     <div className="status"><div className="stat-indicator"></div><p>{props.data.dynamic.status}</p></div>
                 </div>
             </div>

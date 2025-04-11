@@ -1,26 +1,25 @@
 import { useState } from "react";
 import WorkLogCards from "../WorkLogCards";
 import { useEffect } from "react";
-import { collection, getDocs } from "firebase/firestore";   
+import { collection, getDocs, query, orderBy } from "firebase/firestore";   
 import { db } from "../firebase";
 import { useOutletContext } from "react-router-dom";
 
-
 function Logs() {
-
     const [userData, adminData] = useOutletContext();
 
     const [searchQuery, setSearchQuery] = useState("");
     const [logarr, setLogArr] = useState([]);        
 
-
-
     useEffect(() => {
         console.log(userData.uid)
         async function fetchLogs() {
             try {
+                // Create a query to order logs by time in descending order
                 const logbookRef = collection(db, `logs/${userData.uid}/logbook`);
-                const logSnapshot = await getDocs(logbookRef);
+                const logQuery = query(logbookRef, orderBy('logtime', 'desc'));
+                
+                const logSnapshot = await getDocs(logQuery);
                 const logData = logSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 setLogArr(logData);
             } catch (error) {
@@ -30,7 +29,9 @@ function Logs() {
         if (userData) fetchLogs();
     }, [userData.uid]);
     
-    const filteredLogs = logarr.filter(log => log.logname.toLowerCase().includes(searchQuery.toLowerCase()));
+    const filteredLogs = logarr.filter(log => 
+        log.logname.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
     return (
         <div className="log-container">
@@ -47,9 +48,14 @@ function Logs() {
             />
             <div className="log-display">
                 {filteredLogs.map((log, index) => (
-                    console.log(log.logtime),
-                    <WorkLogCards className={`log-item ${log.logname.toLowerCase().includes("critical") ? "critical-log" : ""}`} key={index} logname={log.logname} logid={"#"+log.id} logtime={new Date(log.logtime.seconds * 1000).toLocaleString()}/>
-
+                    <WorkLogCards 
+                        className={`log-item ${log.logname.toLowerCase().includes("critical") ? "critical-log" : ""}`} 
+                        key={log.id} 
+                        logname={log.logname} 
+                        logid={"#"+log.id} 
+                        logtime={new Date(log.logtime.seconds * 1000).toLocaleString()} 
+                        logdesc={log.logdesc}
+                    />
                 ))}
             </div>
         </div>

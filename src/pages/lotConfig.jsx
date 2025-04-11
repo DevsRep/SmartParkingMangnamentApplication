@@ -15,6 +15,7 @@ function LotConfig(){
 
 
     const [parkingLotData, setParkingLotData] = useState(null)
+    const [parkingLotStatData, setParkingLotStatData] = useState(null)
     const [loading, setLoading] = useState(false)
 
     const getParkingData = async ()=>{
@@ -22,6 +23,16 @@ function LotConfig(){
         if (parkingDoc.exists()) {
             // console.log(parkingDoc.data())
             setParkingLotData(parkingDoc.data())
+            // return userDoc.data(); // Return user details
+        } else {
+            console.log("No user data found!");
+            return null;
+        }
+
+        const parkingStatDoc = await getDoc(doc(db, "parking-lots", adminData.parkingLotId));
+        if (parkingStatDoc.exists()) {
+            // console.log(parkingDoc.data())
+            setParkingLotStatData(parkingStatDoc.data())
             // return userDoc.data(); // Return user details
         } else {
             console.log("No user data found!");
@@ -74,7 +85,7 @@ function LotConfig(){
             await RecordLog(adminData.aid, `Pricing Changed`, `Admin has changed the pricing of parking`);
         } catch (error) {
             console.error("Error updating", error);
-            alert("Failed to update pricing.");
+            // alert("Failed to update pricing.");
         // setLoading(false)
 
         }
@@ -85,11 +96,17 @@ function LotConfig(){
 
     return(
 
-        !parkingLotData || loading ? <LoadingScreen/> :
+        !parkingLotData || loading || !parkingLotStatData ? <LoadingScreen/> :
 
         <div className="lot-config-cont">
 
             <h3>Your Lot</h3>
+
+            <hr></hr>
+
+            <h4>Name:{parkingLotStatData.Name}</h4>
+            <h5>{parkingLotStatData.address}</h5>
+
 
             <hr></hr>
 

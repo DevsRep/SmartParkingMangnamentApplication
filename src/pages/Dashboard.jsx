@@ -9,6 +9,7 @@ import { getDoc, doc} from "firebase/firestore"
 import { db } from "../firebase"
 import { onSnapshot } from "firebase/firestore"
 import { collection } from "firebase/firestore"
+import { query, orderBy } from "firebase/firestore"
 
 
 function Dashboard(){
@@ -18,6 +19,7 @@ function Dashboard(){
     const [parkingLotData, setParkingLotData] = useState(null)
     const [logData, setlogData] = useState([])
     const [loading, setLoading] = useState(false)
+    const [demand, setDemand] = useState("Low")
 
     // const getParkingData = async ()=>{
     //     const parkingDoc = await getDoc(doc(db, "parking-dyn-info", adminData.parkingLotId));
@@ -69,37 +71,24 @@ function Dashboard(){
 
     useEffect(()=>{
         if(!adminData) return
-
-        // const logRef = doc(db, `logs`, adminData.aid);
-        // const unsubscribe = onSnapshot(logRef, (snapshot) => {
-        //     if (snapshot.exists()) {
-        //         console.log(snapshot.data())
-        //         setlogData(snapshot.data());
-        //     } else {
-        //         console.log("No real-time data available for logs");
-        //     }
-        // });
-
-        const unsubscribe = onSnapshot(collection(db, `logs/${adminData.aid}/logbook`), (querySnapshot) => {
+    
+        const logsRef = collection(db, `logs/${adminData.aid}/logbook`);
+        const orderedLogsQuery = query(logsRef, orderBy('logtime', 'desc'));
+    
+        const unsubscribe = onSnapshot(orderedLogsQuery, (querySnapshot) => {
             const logsarr = [];
             querySnapshot.forEach((doc) => {
-                // console.log(db.data)
-                logsarr.push({...doc.data(),id:doc.id});
+                logsarr.push({...doc.data(), id:doc.id});
             });
             setlogData(logsarr)
             setTimeout(()=>{
                 console.log(logData)
             },2000)
         });
-
-
+    
         // Cleanup listener on unmount
         return () => unsubscribe();
     },[adminData])
-
-
-
-
 
     useEffect(() => {
         if (!adminData) return;
@@ -126,6 +115,29 @@ function Dashboard(){
             console.log("Data Not Found")
         }
     }, [adminData]);
+    
+    
+
+    const checkDemand = ()=>{
+        if(parkingLotData.remaining<parkingLotData.capacity/3){
+            setDemand("High")
+            return "High"
+        }else if(parkingLotData.remaining<parkingLotData.capacity/2){
+            setDemand("Medium")
+            return "Medium"
+        }else{
+            setDemand("Low")
+            return "Low"
+        }
+    }
+    
+
+    useEffect(()=>{
+        if(parkingLotData){
+
+            checkDemand()
+        } 
+    }, parkingLotData)
 
 
 
@@ -150,9 +162,9 @@ function Dashboard(){
                     <Cards cardName = {"Lots Available"} cardVal={parkingLotData.remaining} />
                     <Cards cardName = {"Lots Occupied"} cardVal={parkingLotData.capacity- parkingLotData.remaining} />
                     <Cards cardName = {"Reservations"} cardVal={parkingLotData.reservations} />
-                    <Cards cardName = {"Current Demand"} cardVal={"Low"} />
+                    <Cards cardName = {"Current Demand"} cardVal={demand} />
                     <Cards cardName = {"Revenue"} cardVal={"$00"} />
-                    <Cards cardName = {"Rating"} cardVal={parkingLotData.rating.avgrate ? parkingLotData.rating.avgrate : "N/A"} />
+                    <Cards cardName = {"Rating"} cardVal={parkingLotData.rating.avgrate ? parkingLotData.rating.avgrate.toFixed(1) : "N/A"} />
 
 
                 </div>
@@ -172,7 +184,7 @@ function Dashboard(){
                     <QuickAccessBtns icon={"📄"} desc={"Portal"} link={"/admin/portal"}/>             
                     <QuickAccessBtns icon={"💵"} desc={"Payments"} />             
                     <QuickAccessBtns icon={"📄"} desc={"Logs"} link={"/admin/logs"}/>             
-                    <QuickAccessBtns icon={"⚠️"} desc={"Alerts"} />             
+                    <QuickAccessBtns icon={"📲"} desc={"Scanner"} link={"/admin/scanner"}/>             
                     <QuickAccessBtns icon={"🙍🏽‍♂️"} desc={"Users"} />             
 
                     

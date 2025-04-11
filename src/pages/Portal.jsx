@@ -1,4 +1,4 @@
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, increment } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../firebase";
 import { where } from "firebase/firestore";
@@ -7,7 +7,9 @@ import { query } from "firebase/firestore";
 import LoadingScreen from "./loading";
 import { useOutletContext } from "react-router-dom";
 import { onSnapshot } from "firebase/firestore";
-import { RecordLog } from "../RecordLog";
+import { AddUserAlert, RecordLog } from "../RecordLog";
+import { getDoc } from "firebase/firestore";
+// import { increment } from "firebase/firestore";
 
 function Portal(){
 
@@ -17,7 +19,7 @@ function Portal(){
     const [reservationNotUsed, setReservationsNotUsed] = useState([])
     const [reservationActive, setReservationsActive] = useState([])
         
-    
+    const [parkingLotData, setParkingLotData] = useState(null)    
 
     const listenToReservations = () => {
         setLoading(true);
@@ -62,6 +64,26 @@ function Portal(){
     };
 
 
+    useEffect(() => {
+        if (!adminData) return;
+
+        // Fetch Static Data once
+
+        // Listen for real-time updates in Firestore
+        const parkingDynRef = doc(db, "parking-dyn-info", adminData.parkingLotId);
+        const unsubscribe = onSnapshot(parkingDynRef, (snapshot) => {
+            if (snapshot.exists()) {
+                setParkingLotData(snapshot.data());
+            } else {
+                console.log("No real-time data available for this parking lot.");
+            }
+        });
+
+        // Cleanup listener on unmount
+        return () => unsubscribe();
+    }, [adminData]);
+
+
     const activateReservation = async(id, userId)=>{
         const resRef = doc(db, `users/${userId}/reservations/`, id); // Reference to user document
         await updateDoc(resRef, { status: "active" });
@@ -71,20 +93,31 @@ function Portal(){
         await updateDoc(parkresRef, { status: "active" });
         // alert("Reservation cancelled successfully")
 
+        const slotRef = doc(db, "parking-dyn-info", adminData.parkingLotId)
+        await updateDoc(slotRef, { remaining: parkingLotData.remaining-1, reservations: parkingLotData.reservations-1});
+
         await RecordLog(adminData.aid, `Parking ticket activation`, `Admin has activated ticket for ${userId}`);
+        await AddUserAlert(userId, "Reservation Activated", `Your reservation for ${reservationNotUsed[0].parkingName} has been activated`)
     }
 
 
     const closeReservation = async(id, userId)=>{
         const resRef = doc(db, `users/${userId}/reservations/`, id); // Reference to user document
-        await updateDoc(resRef, { status: "close" });
+        await updateDoc(resRef, { status: "closed" });
         // alert("Reservation cancelled successfully")
 
         const parkresRef = doc(db, `reservations/${adminData.parkingLotId}/list/`, id); // Reference to user document
-        await updateDoc(parkresRef, { status: "close" });
+        await updateDoc(parkresRef, { status: "closed" });
         // alert("Reservation cancelled successfully")
 
+
+
+        const slotRef = doc(db, "parking-dyn-info", adminData.parkingLotId)
+        // console.log(slotRef.data())
+        await updateDoc(slotRef, { remaining: parkingLotData.remaining+1});
+
         await RecordLog(adminData.aid, `Parking ticket closed`, `Admin has closed ticket for ${userId}`);
+        await AddUserAlert(userId, "Reservation Closed", `Your reservation for ${reservationNotUsed[0].parkingName} has been closed`)
     }
 
 
@@ -153,7 +186,7 @@ function Portal(){
                                 </p>
 
                                 <div className="button-container">
-                                <button style={{backgroundColor:"red"}} className="cancel-btn" onClick={(e)=>closeReservation(res.id, res.parkingLotId)}>Close</button>
+                                <button style={{backgroundColor:"red"}} className="cancel-btn" onClick={(e)=>closeReservation(res.id, res.userId)}>Close</button>
                                 </div>
                         
                             </div>
